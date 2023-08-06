@@ -50,7 +50,8 @@ impl<'a> Stream<'a> {
 	}
 
 	pub fn index(&self) -> usize {
-		unsafe { (*self.as_ptr()).index as usize }
+		self.index
+		// unsafe { (*self.as_ptr()).index as usize }
 	}
 
 	pub fn time_base(&self) -> Rational {
