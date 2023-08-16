@@ -669,6 +669,12 @@ fn main() {
         .unwrap()
         .join()
         .unwrap();
+
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    match target_os.as_str() {
+        "vita" => vita_link_libs(),
+        _ => (),
+    };
 }
 
 fn thread_main() {
@@ -1376,4 +1382,15 @@ fn is_static_available(lib: &str, dirs: &[PathBuf]) -> bool {
         println!("cargo:warning=static {} not found", libname);
     }
     has
+}
+
+fn vita_link_libs() {
+    if let Ok(sdk) = std::env::var("VITASDK").map(std::path::PathBuf::from) {
+        let lib_dir = sdk.join("arm-vita-eabi").join("lib");
+        println!("cargo:rustc-link-search={}", lib_dir.to_str().unwrap());
+        println!("cargo:rustc-link-lib=static=mp3lame");
+        println!("cargo:rustc-link-lib=static=z");
+    } else {
+        println!("cargo:warning=$VITASDK not set!");
+    }
 }
