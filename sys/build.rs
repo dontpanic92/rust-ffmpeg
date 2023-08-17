@@ -1313,6 +1313,12 @@ fn thread_main() {
         builder = builder.header(search_include(&include_paths, "libavutil/hwcontext_drm.h"))
     }
 
+    let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+    if target_os.as_str() == "vita"
+    {
+        builder = builder.clang_arg("-D__GLIBC_USE(...)=0");
+    }
+
     // Finish the builder and generate the bindings.
     let mut bindings = builder
         .generate()
