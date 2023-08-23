@@ -281,7 +281,7 @@ impl ChannelLayout {
 	}
 
 	pub fn set_order(&mut self, order: ChannelOrder) {
-		self.0.order = AVChannelOrder(order as u32);
+		self.0.order = AVChannelOrder((order as u32).try_into().unwrap());
 	}
 
 	pub fn channels(&self) -> i32 {
