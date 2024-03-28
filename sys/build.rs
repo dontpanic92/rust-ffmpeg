@@ -701,8 +701,7 @@ fn thread_main() {
 	else if let Some(paths) = try_vcpkg(statik) {
 		// vcpkg doesn't detect the "system" dependencies
 		if statik {
-            #[cfg(target_env = "msvc")]
-			{
+			if cfg!(target_env = "msvc") {
 				if cfg!(feature = "avcodec") || cfg!(feature = "avdevice") {
 					println!("cargo:rustc-link-lib=ole32");
 				}
