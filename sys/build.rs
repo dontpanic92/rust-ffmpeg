@@ -701,18 +701,21 @@ fn thread_main() {
 	else if let Some(paths) = try_vcpkg(statik) {
 		// vcpkg doesn't detect the "system" dependencies
 		if statik {
-			if cfg!(feature = "avcodec") || cfg!(feature = "avdevice") {
-				println!("cargo:rustc-link-lib=ole32");
-			}
+            #[cfg(target_env = "msvc")]
+			{
+				if cfg!(feature = "avcodec") || cfg!(feature = "avdevice") {
+					println!("cargo:rustc-link-lib=ole32");
+				}
 
-			if cfg!(feature = "avformat") {
-				println!("cargo:rustc-link-lib=secur32");
-				println!("cargo:rustc-link-lib=ws2_32");
-			}
+				if cfg!(feature = "avformat") {
+					println!("cargo:rustc-link-lib=secur32");
+					println!("cargo:rustc-link-lib=ws2_32");
+				}
 
-			// avutil depdendencies
-			println!("cargo:rustc-link-lib=bcrypt");
-			println!("cargo:rustc-link-lib=user32");
+				// avutil depdendencies
+				println!("cargo:rustc-link-lib=bcrypt");
+				println!("cargo:rustc-link-lib=user32");
+			}
 		}
 
 		paths
