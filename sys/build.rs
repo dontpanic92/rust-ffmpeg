@@ -403,12 +403,12 @@ fn os_from_triple(triple: &str) -> &str {
         .unwrap()
 }
 
-#[cfg(not(target_env = "msvc"))]
+#[cfg(not(any(target_env = "msvc", target_os = "linux", target_os = "android")))]
 fn try_vcpkg(_statik: bool) -> Option<Vec<PathBuf>> {
     None
 }
 
-#[cfg(target_env = "msvc")]
+#[cfg(any(target_env = "msvc", target_os = "linux", target_os = "android"))]
 fn try_vcpkg(statik: bool) -> Option<Vec<PathBuf>> {
     if !statik {
         env::set_var("VCPKGRS_DYNAMIC", "1");
