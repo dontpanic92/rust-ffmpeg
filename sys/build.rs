@@ -648,6 +648,24 @@ fn main() {
 		.unwrap()
 		.join()
 		.unwrap();
+
+	let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+	match target_os.as_str() {
+		"vita" => vita_link_libs(),
+		_ => (),
+	};
+}
+
+fn vita_link_libs() {
+	if let Ok(sdk) = std::env::var("VITASDK").map(std::path::PathBuf::from) {
+		let lib_dir = sdk.join("arm-vita-eabi").join("lib");
+		println!("cargo:rustc-link-search={}", lib_dir.to_str().unwrap());
+		println!("cargo:rustc-link-lib=static=mp3lame");
+		println!("cargo:rustc-link-lib=static=z");
+	}
+	else {
+		println!("cargo:warning=$VITASDK not set!");
+	}
 }
 
 fn thread_main() {
@@ -1092,6 +1110,11 @@ fn thread_main() {
 
 	if env::var("CARGO_FEATURE_LIB_DRM").is_ok() {
 		builder = builder.header(search_include(&include_paths, "libavutil/hwcontext_drm.h"))
+	}
+
+	let target_os = std::env::var("CARGO_CFG_TARGET_OS").unwrap();
+	if target_os.as_str() == "vita" {
+		builder = builder.clang_arg("-D__GLIBC_USE(...)=0");
 	}
 
 	// Finish the builder and generate the bindings.
