@@ -704,6 +704,7 @@ fn thread_main() {
 			if cfg!(target_env = "msvc") {
 				if cfg!(feature = "avcodec") || cfg!(feature = "avdevice") {
 					println!("cargo:rustc-link-lib=ole32");
+					println!("cargo:rustc-link-lib=strmiids");
 				}
 
 				if cfg!(feature = "avformat") {
