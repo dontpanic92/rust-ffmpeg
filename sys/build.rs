@@ -705,6 +705,7 @@ fn thread_main() {
 				if cfg!(feature = "avcodec") || cfg!(feature = "avdevice") {
 					println!("cargo:rustc-link-lib=ole32");
 					println!("cargo:rustc-link-lib=strmiids");
+					println!("cargo:rustc-link-lib=mfuuid");
 				}
 
 				if cfg!(feature = "avformat") {
